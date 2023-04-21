@@ -10,7 +10,7 @@ class Welcome extends REST_Controller {
         echo json_encode($response);
     }
 
-	public function get_home_page_data_post()
+	public function register_user_post()
 	{
 		$response = array('code' => - 1, 'status' => false, 'message' => '');
 		//$validate = validateToken();
