@@ -58,7 +58,7 @@ $autoload['packages'] = array();
 |
 |	$autoload['libraries'] = array('user_agent' => 'ua');
 */
-$autoload['libraries'] = array('email');
+$autoload['libraries'] = array('database', 'email','form_validation');
 
 /*
 | -------------------------------------------------------------------
@@ -102,7 +102,7 @@ $autoload['helper'] = array('url', 'file','jwt', 'authorization', 'date','valida
 | config files.  Otherwise, leave it blank.
 |
 */
-$autoload['config'] = array();
+$autoload['config'] = array('jwt');
 
 /*
 | -------------------------------------------------------------------
@@ -131,4 +131,4 @@ $autoload['language'] = array();
 |
 |	$autoload['model'] = array('first_model' => 'first');
 */
-$autoload['model'] = array();
+$autoload['model'] = array('link','model');

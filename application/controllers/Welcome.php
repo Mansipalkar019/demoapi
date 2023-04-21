@@ -57,14 +57,13 @@ class Welcome extends REST_Controller {
 				if(empty($check_user_exist))
 				{
 					$inserted_id = $this->model->insertData('tbl_user',$curl_data);
-					$last_insert_id = $this->db->insert_id();
-
+					
 					$current_date = new DateTime();
 					$six_months_from_now = $current_date->modify('+6 months')->format('Y-m-d');
 
 					$user_wallet=array(
-						'fk_user_id'=>$last_insert_id,
-						'wallet_amount'=>$first_name,
+						'fk_user_id'=>$inserted_id,
+						'wallet_amount'=>$wallet_amount,
 						'validity_from_date'=>$current_date,
 						'validity_to_date'=>$six_months_from_now,
 						'created_at'=>date('Y-m-d H:i:s'),
@@ -74,7 +73,7 @@ class Welcome extends REST_Controller {
 					$response['status'] = true;
 					$response['message'] = 'Registration Successfull'; 
 				}else{
-					$response['message'] = 'Registration Failed';
+					$response['message'] = 'User already Exist';
 					$response['code'] = 201;
 				}
 			}
