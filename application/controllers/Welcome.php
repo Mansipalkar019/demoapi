@@ -21,6 +21,7 @@ class Welcome extends REST_Controller {
             $last_name = $this->input->post('last_name');
 			$contact_no = $this->input->post('contact_no');
 			$wallet_amount=$this->input->post('wallet_amount');
+			$card_type=$this->input->post('card_type');
 			if (empty($rfid_card_no)) {
                 $response['message'] = 'RFID NO. is required.';
                 $response['code'] = 201;
@@ -60,6 +61,7 @@ class Welcome extends REST_Controller {
 						'first_name'=>$first_name,
 						'last_name'=>$last_name,
 						'contact_no'=>$contact_no,
+						'card_type'=>$card_type,
 						'date'=>date('Y-m-d'),
 					);
 					$inserted_id = $this->model->insertData('tbl_user',$curl_data);
