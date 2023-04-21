@@ -14,7 +14,6 @@ class Welcome extends REST_Controller {
 	{
 		$response = array('code' => - 1, 'status' => false, 'message' => '');
 		$validate = validateToken();
-
 		if ($validate) {
 
 			$rfid_card_no = $this->input->post('rfid_card_no');
