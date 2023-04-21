@@ -66,8 +66,7 @@ class Welcome extends REST_Controller {
 					$inserted_id = $this->model->insertData('tbl_user',$curl_data);
 					
 					$current_date = date('Y-m-d');
-					// $six_months_from_now = $current_date->modify('+6 months')->format('Y-m-d');
-
+					
 					$six_months_from_now = date('Y-m-d', strtotime("+6 months", strtotime($current_date)));
 
 					$user_wallet=array(
@@ -83,6 +82,47 @@ class Welcome extends REST_Controller {
 				}
 			}
 
+		
+		// }else{
+		// 	$response['code'] = REST_Controller::HTTP_UNAUTHORIZED;
+        //     $response['message'] = 'Unauthorised';
+		// }
+		
+		echo json_encode($response);
+	}
+
+	public function fetch_rfid_post()
+	{
+		$response = array('code' => - 1, 'status' => false, 'message' => '');
+		//$validate = validateToken();
+
+		//if ($validate) {
+
+			$rfid_card_no = $this->input->post('rfid_card_no');
+            $amt = 20;
+			$check_rfid_exist = $this->Supermodel->get_user_data($rfid_card_no);
+			$get_wallet_history = $this->model->selectWhereData('tbl_wallet_history', array('used_status'=>1),array('*'));
+			if(!empty($get_wallet_history['total_amount'])){
+				$deduct_amt=$get_wallet_history['total_amount']-$amt;
+				$final_amt=$get_wallet_history['add_amount']-$deduct_amt;
+				$this->model->updateData(' tbl_wallet_history',array('used_status'=>0),array('id'=>$get_wallet_history['id']));
+				$curl_data=array(
+					'fk_user_id'=>$get_wallet_history['fk_user_id'],
+					'deduct_amount'=>$amt,
+					'total_amount'=>$deduct_amt,
+					'used_status'=>1,
+				);
+				$inserted_id = $this->model->insertData('tbl_wallet_history',$curl_data);
+				$response['code'] = REST_Controller::HTTP_OK;
+				$response['status'] = true;
+				$response['message'] = 'Success '; 
+				$response['deduct_amount'] = $amt; 
+				$response['total_amount'] = $deduct_amt; 
+			}else{
+				$response['code'] = 201;
+				$response['status'] = false;
+				$response['message'] = 'Card is empty';                  
+			}
 		
 		// }else{
 		// 	$response['code'] = REST_Controller::HTTP_UNAUTHORIZED;
