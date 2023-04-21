@@ -13,7 +13,6 @@ class Supermodel extends CI_Model {
 		
 		$this->db->where('tbl_user.rfid_card_no',$rfid);
 		$this->db->order_by('tbl_user.id','DESC');
-		$this->db->group_by('tbl_user.id');
 		$query = $this->db->get();
         $result = $query->result_array();
         return $result;

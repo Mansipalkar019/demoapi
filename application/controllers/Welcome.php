@@ -101,13 +101,12 @@ class Welcome extends REST_Controller {
 	{
 		$response = array('code' => - 1, 'status' => false, 'message' => '');
 		$validate = validateToken();
-
 		if ($validate) {
 
 			$rfid_card_no = $this->input->post('rfid_card_no');
             $amt = 20;
-			$check_rfid_exist = $this->Supermodel->get_user_data($rfid_card_no);
-			$get_wallet_history = $this->model->selectWhereData('tbl_wallet_history', array('used_status'=>1),array('*'));
+			$get_user_data = $this->model->selectWhereData('tbl_user',array('rfid_card_no'=>$rfid_card_no),array('id'));
+			$get_wallet_history = $this->model->selectWhereData('tbl_wallet_history', array('used_status'=>1,'fk_user_id'=>$get_user_data['id']),array('*'));
 			if(!empty($get_wallet_history['total_amount'])){
 				$deduct_amt=$get_wallet_history['total_amount']-$amt;
 				$final_amt=$get_wallet_history['add_amount']-$deduct_amt;
@@ -120,14 +119,14 @@ class Welcome extends REST_Controller {
 				);
 				$inserted_id = $this->model->insertData('tbl_wallet_history',$curl_data);
 				$response['code'] = REST_Controller::HTTP_OK;
-				$response['status'] = true;
+				$response['status'] = 1;
 				$response['message'] = 'Success '; 
-				$response['deduct_amount'] = $amt; 
-				$response['total_amount'] = $deduct_amt; 
+				// $response['deduct_amount'] = $amt; 
+				// $response['total_amount'] = $deduct_amt; 
 			}else{
 				$response['code'] = 201;
-				$response['status'] = false;
-				$response['message'] = '';                  
+				$response['status'] = 0;
+				$response['message'] = 'Please Recharge your wallet';                  
 			}
 		
 		}else{
