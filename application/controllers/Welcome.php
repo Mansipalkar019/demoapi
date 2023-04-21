@@ -13,9 +13,9 @@ class Welcome extends REST_Controller {
 	public function register_user_post()
 	{
 		$response = array('code' => - 1, 'status' => false, 'message' => '');
-		//$validate = validateToken();
+		$validate = validateToken();
 
-		//if ($validate) {
+		if ($validate) {
 
 			$rfid_card_no = $this->input->post('rfid_card_no');
             $first_name = $this->input->post('first_name');
@@ -83,10 +83,10 @@ class Welcome extends REST_Controller {
 			}
 
 		
-		// }else{
-		// 	$response['code'] = REST_Controller::HTTP_UNAUTHORIZED;
-        //     $response['message'] = 'Unauthorised';
-		// }
+		}else{
+			$response['code'] = REST_Controller::HTTP_UNAUTHORIZED;
+            $response['message'] = 'Unauthorised';
+		}
 		
 		echo json_encode($response);
 	}
@@ -94,9 +94,9 @@ class Welcome extends REST_Controller {
 	public function fetch_rfid_post()
 	{
 		$response = array('code' => - 1, 'status' => false, 'message' => '');
-		//$validate = validateToken();
+		$validate = validateToken();
 
-		//if ($validate) {
+		if ($validate) {
 
 			$rfid_card_no = $this->input->post('rfid_card_no');
             $amt = 20;
@@ -124,10 +124,10 @@ class Welcome extends REST_Controller {
 				$response['message'] = 'Card is empty';                  
 			}
 		
-		// }else{
-		// 	$response['code'] = REST_Controller::HTTP_UNAUTHORIZED;
-        //     $response['message'] = 'Unauthorised';
-		// }
+		}else{
+			$response['code'] = REST_Controller::HTTP_UNAUTHORIZED;
+            $response['message'] = 'Unauthorised';
+		}
 		
 		echo json_encode($response);
 	}
