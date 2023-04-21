@@ -121,7 +121,7 @@ class Welcome extends REST_Controller {
 			}else{
 				$response['code'] = 201;
 				$response['status'] = false;
-				$response['message'] = 'Card is empty';                  
+				$response['message'] = '';                  
 			}
 		
 		}else{
