@@ -5,7 +5,7 @@ class Link extends CI_Model {
 
 function hits($link,$request,$token='',$type = 1)
     {
-        $Base_API = 'http://localhost/amusement_park/demoproject';
+        $Base_API = 'http://localhost/amusement_park/demoapi/';
         $query = http_build_query($request);
         if ($type == 0) {
             $custom_type = 'GET';

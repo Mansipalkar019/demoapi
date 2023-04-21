@@ -22,16 +22,6 @@ class Welcome extends REST_Controller {
             $last_name = $this->input->post('last_name');
 			$contact_no = $this->input->post('contact_no');
 			$wallet_amount=$this->input->post('wallet_amount');
-
-			$curl_data=array(
-				'rfid_card_no'=>$rfid_card_no,
-				'first_name'=>$first_name,
-				'last_name'=>$last_name,
-				'contact_no'=>$contact_no,
-				'date'=>date('Y-m-d'),
-				'created_at'=>date('Y-m-d H:i:s'),
-			);
-			
 			if (empty($rfid_card_no)) {
                 $response['message'] = 'RFID NO. is required.';
                 $response['code'] = 201;
@@ -52,29 +42,44 @@ class Welcome extends REST_Controller {
                 $response['code'] = 201;
 			}
 			else
-			{
-				$check_user_exist = $this->model->selectWhereData('tbl_user',array('rfid_card_no'=>$rfid_card_no,'contact_no'=>$contact_no),array('*'),false,array('id' => 'desc'));
-				if(empty($check_user_exist))
-				{
+			{				
+				$check_rfid_card_no_exist = $this->model->CountWhereRecord('tbl_user',array('rfid_card_no'=>$rfid_card_no));
+				$check_contact_no_exist = $this->model->CountWhereRecord('tbl_user',array('contact_no'=>$contact_no));
+				if($check_rfid_card_no_exist > 0){
+                        $response['code'] = 201;
+                        $response['status'] = false;
+                        $response['message'] = 'RFID Already exist.';                
+                        $response['error_status'] = 'rfid';                 
+                }else if($check_contact_no_exist > 0){
+                        $response['code'] = 201;
+                        $response['status'] = false;
+                        $response['message'] = 'Contact No Already exist.';                
+                        $response['error_status'] = 'contact';                   
+                }else{
+					$curl_data=array(
+						'rfid_card_no'=>$rfid_card_no,
+						'first_name'=>$first_name,
+						'last_name'=>$last_name,
+						'contact_no'=>$contact_no,
+						'date'=>date('Y-m-d'),
+					);
 					$inserted_id = $this->model->insertData('tbl_user',$curl_data);
 					
-					$current_date = new DateTime();
-					$six_months_from_now = $current_date->modify('+6 months')->format('Y-m-d');
+					$current_date = date('Y-m-d');
+					// $six_months_from_now = $current_date->modify('+6 months')->format('Y-m-d');
+
+					$six_months_from_now = date('Y-m-d', strtotime("+6 months", strtotime($current_date)));
 
 					$user_wallet=array(
 						'fk_user_id'=>$inserted_id,
 						'wallet_amount'=>$wallet_amount,
 						'validity_from_date'=>$current_date,
 						'validity_to_date'=>$six_months_from_now,
-						'created_at'=>date('Y-m-d H:i:s'),
 					);
 					$inserted_id = $this->model->insertData('tbl_user_wallet',$user_wallet);
 					$response['code'] = REST_Controller::HTTP_OK;
 					$response['status'] = true;
 					$response['message'] = 'Registration Successfull'; 
-				}else{
-					$response['message'] = 'User already Exist';
-					$response['code'] = 201;
 				}
 			}
 
