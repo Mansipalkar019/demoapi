@@ -76,7 +76,14 @@ class Welcome extends REST_Controller {
 						'validity_from_date'=>$current_date,
 						'validity_to_date'=>$six_months_from_now,
 					);
-					$inserted_id = $this->model->insertData('tbl_user_wallet',$user_wallet);
+					$this->model->insertData('tbl_user_wallet',$user_wallet);
+					$user_wallet_history = array(
+						'fk_user_id'=>$inserted_id,
+						'add_amount'=>$wallet_amount,
+						'total_amount'=>$wallet_amount,
+						'used_status'=>1,
+					);
+					$this->model->insertData('tbl_wallet_history',$user_wallet_history);
 					$response['code'] = REST_Controller::HTTP_OK;
 					$response['status'] = true;
 					$response['message'] = 'Registration Successfull'; 
