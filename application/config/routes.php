@@ -54,3 +54,4 @@ $route['404_override'] = '';
 $route['translate_uri_dashes'] = FALSE;
 $route['register-user']='welcome/register_user';
 $route['fetch-rfid']='welcome/fetch_rfid';
+$route['get-user-hist']='welcome/get_user_hist';
